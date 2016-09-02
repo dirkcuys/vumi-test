@@ -21,6 +21,10 @@ RUN npm install moment \
     go-jsbox-ona \
     go-jsbox-xform
 
+# Workaround for sandboxed application losing context - manually install the
+# *dependencies* globally.
+# See https://github.com/praekelt/vumi-sandbox/issues/15
+RUN mv ./node_modules /usr/local/lib/
 COPY ./jssandbox.yaml /app/config.yaml
 
 ENV WORKER_CLASS="vxsandbox.worker.StandaloneJsFileSandbox" \

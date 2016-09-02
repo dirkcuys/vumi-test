@@ -13,7 +13,8 @@ worker_name: jsbox_application
 javascript_file: app.js
 sandbox_id: sandbox1
 
-app_context: "{require: function(m) { if (['moment', 'url', 'querystring', 'crypto', 'lodash', 'q', 'jed', 'vumigo_v01', 'vumigo_v02', 'go-jsbox-location', 'go-jsbox-metrics-helper', 'go-jsbox-ona', 'go-jsbox-xform'].indexOf(m) >= 0) return require(m); return null; }, Buffer: Buffer}"
+#app_context: "{require: function(m) { if (['moment', 'url', 'querystring', 'crypto', 'lodash', 'q', 'jed', 'vumigo_v01', 'vumigo_v02', 'go-jsbox-location', 'go-jsbox-metrics-helper', 'go-jsbox-ona', 'go-jsbox-xform'].indexOf(m) >= 0) return require(m); return null; }, Buffer: Buffer}"
+app_context: "{require: require, Buffer: Buffer}"
 
 rlimits:
   RLIMIT_DATA: [67108864, 67108864] # 64 MB

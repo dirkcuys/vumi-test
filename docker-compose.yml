@@ -4,31 +4,8 @@ services:
     image: redis
   rabbitmq:
     image: rabbitmq
-  #smppsim:
-  #  build: smppsim/
-  #  ports:
-  #  - "8080:8080"
-  #vumi-smpp-transport:
-  #  image: praekeltfoundation/vumi
-  #  volumes:
-  #  - ./vumi-smpp-transport-conf.yaml:/app/config.yaml
-  #  environment:
-  #  - AMQP_HOST=rabbitmq
-  #  - WORKER_CLASS=vumi.transports.smpp.SmppTransport
-  #  - VUMI_OPT_transport_name=smpp_transport
-  #  - VUMI_OPT_system_id=smppclient1
-  #  - VUMI_OPT_password=password
-  #  - VUMI_OPT_host=smppsim
-  #  - VUMI_OPT_port=2775
-  #  - CONFIG_FILE=config.yaml
-  #  depends_on:
-  #  - smppsim
-  #  - rabbitmq
-  #  - redis
   vumi-telnet-transport:
     image: praekeltfoundation/vumi
-    #volumes:
-    #- ./vumi-smpp-transport-conf.yaml:/app/config.yaml
     environment:
     - AMQP_HOST=rabbitmq
     - WORKER_CLASS=vumi.transports.telnet.TelnetServerTransport
@@ -42,6 +19,7 @@ services:
     build: vxsandbox/
     volumes:
     - ./app.js:/app/app.js
+    - ./app-config.json:/app/config.json
     environment:
     - AMQP_HOST=rabbitmq
     - VUMI_OPT_transport_name=telnet_transport
