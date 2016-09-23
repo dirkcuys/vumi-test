@@ -18,5 +18,7 @@ To interact with the example application, open up a telnet client
 You should see
 
 > Hi there! What do you want to do?
+
 > 1. Show this menu again
+
 > 2. Exit
