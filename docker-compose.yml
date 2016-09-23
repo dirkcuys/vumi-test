@@ -16,17 +16,30 @@ services:
     - postgres
     environment:
     - DATABASE_URL=postgres://save4life:password@postgres:5432/save4life
-  vumi-telnet-transport:
-    image: praekeltfoundation/vumi
+  junebug:
+    image: praekeltfoundation/junebug
     environment:
+    - REDIS_HOST=redis
     - AMQP_HOST=rabbitmq
-    - WORKER_CLASS=vumi.transports.telnet.TelnetServerTransport
-    - VUMI_OPT_transport_name=telnet_transport
-    - VUMI_OPT_telnet_port=9010
+    - AMQP_VHOST=/
     ports:
+    - "8001:80"
+    - "8080:8080"
     - "9010:9010"
     depends_on:
+    - redis
     - rabbitmq
+#  vumi-telnet-transport:
+#    image: praekeltfoundation/vumi
+#    environment:
+#    - AMQP_HOST=rabbitmq
+#    - WORKER_CLASS=vumi.transports.telnet.TelnetServerTransport
+#    - VUMI_OPT_transport_name=telnet_transport
+#    - VUMI_OPT_telnet_port=9010
+#    ports:
+#    - "9010:9010"
+#    depends_on:
+#    - rabbitmq
   vumi-jssandbox:
     build: vxsandbox/
     volumes:
