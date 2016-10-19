@@ -6,16 +6,6 @@ services:
     image: rabbitmq
   postgres:
     image: postgres:9.3
-  save4life-api:
-    build: save4life-api/
-    volumes: 
-    - ./save4life-api/:/app
-    ports:
-    - "8000:80"
-    depends_on:
-    - postgres
-    environment:
-    - DATABASE_URL=postgres://save4life:password@postgres:5432/save4life
   junebug:
     image: praekeltfoundation/junebug
     environment:
@@ -26,30 +16,35 @@ services:
     - "8001:80"
     - "8080:8080"
     - "9010:9010"
+    - "9011:9011"
     depends_on:
     - redis
     - rabbitmq
-#  vumi-telnet-transport:
-#    image: praekeltfoundation/vumi
-#    environment:
-#    - AMQP_HOST=rabbitmq
-#    - WORKER_CLASS=vumi.transports.telnet.TelnetServerTransport
-#    - VUMI_OPT_transport_name=telnet_transport
-#    - VUMI_OPT_telnet_port=9010
-#    ports:
-#    - "9010:9010"
-#    depends_on:
-#    - rabbitmq
+  api:
+    build: save4life-api/
+    volumes: 
+    - ./save4life-api/:/app
+    ports:
+    - "8000:80"
+    depends_on:
+    - postgres
+    - rabbitmq
+    - junebug
+    env_file:
+    - airtime_variables.env
+    environment:
+    - DATABASE_URL=postgres://save4life:password@postgres:5432/save4life
+    - BROKER_URL=amqp://guest:guest@rabbitmq//
+    - JUNEBUG_SMS_URL=http://junebug:8080/channels/202ae5bc-0be8-4390-8ab7-37fc691f4e9b/messages/
   vumi-jssandbox:
-    build: vxsandbox/
+    build: save4life/
     volumes:
-    - ./app.js:/app/app.js
+    - ./save4life/go-app.js:/app/app.js
     - ./app-config.json:/app/config.json
     environment:
     - AMQP_HOST=rabbitmq
     - VUMI_OPT_transport_name=telnet_transport
-    links:
-    - save4life-api:api
     depends_on:
     - rabbitmq
     - redis
+    - api
